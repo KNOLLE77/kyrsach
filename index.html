@@ -1,0 +1,2562 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee House | Кофейня под звездами</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===== ТЕМНАЯ ТЕМА (по умолчанию) ===== */
+        body.dark-theme {
+            --bg-primary: #0a0718;
+            --bg-secondary: #1a1035;
+            --bg-card: rgba(26, 16, 53, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --accent-violet: #7d3cff;
+            --accent-pink: #ff3b9c;
+            --accent-glow: 0 0 20px rgba(125, 60, 255, 0.5), 0 0 40px rgba(255, 59, 156, 0.3);
+            --accent-glow-hover: 0 0 30px rgba(125, 60, 255, 0.8), 0 0 60px rgba(255, 59, 156, 0.5);
+            --border-color: rgba(199, 125, 255, 0.3);
+            --shadow-soft: 0 15px 35px rgba(0, 0, 0, 0.5);
+            --shadow-hover: 0 30px 50px rgba(0, 0, 0, 0.6), 0 0 80px rgba(184, 77, 255, 0.4);
+            --gradient-card: linear-gradient(145deg, #1e1530, #2a1b4a, #1a1035);
+            --star-opacity: 1;
+        }
+
+        /* ===== СВЕТЛАЯ ТЕМА ===== */
+        body.light-theme {
+            --bg-primary: #f5f0ff;
+            --bg-secondary: #e6d9ff;
+            --bg-card: rgba(255, 255, 255, 0.8);
+            --text-primary: #2d1b4a;
+            --text-secondary: #4a2b6e;
+            --accent-violet: #b87cff;
+            --accent-pink: #ff69b4;
+            --accent-glow: 0 0 20px rgba(184, 124, 255, 0.5), 0 0 40px rgba(255, 105, 180, 0.3);
+            --accent-glow-hover: 0 0 30px rgba(184, 124, 255, 0.8), 0 0 60px rgba(255, 105, 180, 0.5);
+            --border-color: rgba(184, 124, 255, 0.3);
+            --shadow-soft: 0 15px 35px rgba(150, 100, 200, 0.15);
+            --shadow-hover: 0 30px 50px rgba(150, 100, 200, 0.25);
+            --gradient-card: linear-gradient(145deg, #ffffff, #f5f0ff, #e6d9ff);
+            --star-opacity: 0.3;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            transition: background-color 0.5s ease, color 0.3s ease;
+        }
+
+        /* ===== ЗВЕЗДНЫЙ ФОН ===== */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            opacity: var(--star-opacity);
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,0));
+            transform: rotate(-45deg);
+            animation: shoot 5s infinite linear;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); box-shadow: 0 0 20px var(--accent-pink); }
+        }
+
+        @keyframes shoot {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(-45deg); opacity: 0.8; }
+            100% { transform: translateX(1000%) translateY(1000%) rotate(-45deg); opacity: 0; }
+        }
+
+        /* ===== КОФЕЙНЫЕ ДЕКОРАЦИИ ===== */
+        .floating-coffee {
+            position: fixed;
+            font-size: 3rem;
+            color: rgba(199, 125, 255, 0.1);
+            pointer-events: none;
+            z-index: 1;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        .coffee-steam {
+            position: fixed;
+            width: 100px;
+            height: 200px;
+            background: radial-gradient(ellipse at center, rgba(199, 125, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            animation: steamFloat 8s infinite ease-in-out;
+            filter: blur(10px);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        @keyframes steamFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.2; }
+            50% { transform: translateY(-50px) scale(1.5); opacity: 0.5; }
+        }
+
+        /* ===== НОВЫЕ АНИМАЦИИ ===== */
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: var(--accent-glow); }
+            50% { box-shadow: var(--accent-glow-hover); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); filter: hue-rotate(0deg); }
+            50% { transform: rotate(180deg); filter: hue-rotate(90deg); }
+            100% { transform: rotate(360deg); filter: hue-rotate(0deg); }
+        }
+
+        @keyframes bounceGlow {
+            0%, 100% { transform: translateY(0); filter: brightness(1); }
+            50% { transform: translateY(-10px); filter: brightness(1.2); }
+        }
+
+        @keyframes rippleEffect {
+            0% { box-shadow: 0 0 0 0 var(--accent-violet), 0 0 0 0 var(--accent-pink); }
+            50% { box-shadow: 0 0 0 20px rgba(125, 60, 255, 0), 0 0 0 40px rgba(255, 59, 156, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(125, 60, 255, 0), 0 0 0 0 rgba(255, 59, 156, 0); }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ===== ПЕРЕКЛЮЧАТЕЛЬ ТЕМЫ ===== */
+        .theme-switcher {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            z-index: 1001;
+            background: var(--bg-secondary);
+            padding: 10px;
+            border-radius: 50px;
+            border: 2px solid var(--accent-violet);
+            box-shadow: var(--accent-glow);
+            animation: pulseGlow 3s infinite;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-pink);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            background: var(--bg-primary);
+            box-shadow: 0 0 20px var(--accent-pink);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1) rotate(180deg);
+            box-shadow: var(--accent-glow-hover);
+        }
+
+        body.dark-theme .theme-btn i {
+            content: "\f185";
+        }
+
+        body.light-theme .theme-btn i {
+            content: "\f186";
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: var(--bg-secondary);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--accent-violet);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-soft);
+            animation: slideInLeft 0.8s ease;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-shadow: 0 0 15px var(--accent-violet);
+            animation: bounceGlow 3s infinite;
+        }
+
+        .logo:hover {
+            transform: scale(1.1) rotate(-3deg);
+            color: var(--accent-pink);
+            text-shadow: 0 0 30px var(--accent-pink);
+        }
+
+        .logo-icon {
+            font-size: 2.2rem;
+            color: var(--accent-pink);
+            animation: rotateGlow 12s infinite, float 6s infinite;
+            filter: drop-shadow(0 0 10px var(--accent-violet));
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 45px;
+        }
+
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            padding: 8px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-violet), var(--accent-pink));
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: right;
+            box-shadow: var(--accent-glow);
+        }
+
+        nav a:hover::after,
+        nav a.active::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        nav a:hover {
+            color: var(--accent-pink);
+            transform: translateY(-3px);
+            text-shadow: 0 0 15px var(--accent-pink);
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            border: 2px solid var(--accent-violet);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--accent-glow);
+            animation: rippleEffect 3s infinite;
+        }
+
+        .cart-icon:hover {
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            color: white;
+            border-color: white;
+            transform: rotate(15deg) scale(1.15);
+            box-shadow: var(--accent-glow-hover);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            color: white;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            border: 2px solid white;
+            box-shadow: var(--accent-glow);
+            animation: pulseGlow 2s infinite;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, 
+                var(--bg-secondary), 
+                var(--bg-primary));
+            padding: 140px 0;
+            margin-bottom: 80px;
+            border-radius: 0 0 80px 80px;
+            position: relative;
+            overflow: hidden;
+            animation: scaleIn 0.8s ease;
+            border-bottom: 2px solid var(--accent-violet);
+        }
+
+        .hero::before {
+            content: '☕☕☕☕☕☕';
+            position: absolute;
+            top: 30px;
+            left: 0;
+            font-size: 5rem;
+            opacity: 0.1;
+            white-space: nowrap;
+            animation: slideInRight 20s linear infinite;
+            color: var(--accent-pink);
+            text-shadow: 0 0 30px var(--accent-violet);
+        }
+
+        .hero::after {
+            content: '☕☕☕☕☕☕';
+            position: absolute;
+            bottom: 30px;
+            right: 0;
+            font-size: 5rem;
+            opacity: 0.1;
+            white-space: nowrap;
+            animation: slideInLeft 20s linear infinite reverse;
+            color: var(--accent-violet);
+            text-shadow: 0 0 30px var(--accent-pink);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 20;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 25px;
+            line-height: 1.2;
+            text-shadow: 0 0 20px var(--accent-violet), 0 0 40px var(--accent-pink);
+            animation: slideInLeft 0.8s ease, bounceGlow 5s infinite;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.8;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            padding: 25px 35px;
+            border-radius: 80px;
+            border: 1px solid var(--accent-violet);
+            box-shadow: var(--accent-glow);
+            animation: slideInRight 1s ease, pulseGlow 4s infinite;
+            font-weight: 500;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            color: white;
+            padding: 16px 42px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 1.15rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--accent-glow);
+            position: relative;
+            overflow: hidden;
+            animation: pulseGlow 2s infinite;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-violet));
+            transform: translateY(-8px) scale(1.08) rotate(2deg);
+            box-shadow: var(--accent-glow-hover);
+            border-color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent-violet);
+            color: var(--text-primary);
+            box-shadow: 0 0 20px var(--accent-violet);
+        }
+
+        .btn-outline:hover {
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            color: white;
+        }
+
+        /* ===== СЕКЦИИ ===== */
+        section {
+            padding: 80px 0;
+            position: relative;
+            animation: scaleIn 0.7s ease;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+            color: var(--text-primary);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            padding-bottom: 15px;
+            text-shadow: 0 0 20px var(--accent-violet);
+            animation: bounceGlow 4s infinite;
+        }
+
+        .section-title::before {
+            content: '☕';
+            position: absolute;
+            left: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            opacity: 0.7;
+            animation: rotateGlow 6s infinite;
+            filter: drop-shadow(0 0 15px var(--accent-pink));
+        }
+
+        .section-title::after {
+            content: '☕';
+            position: absolute;
+            right: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            opacity: 0.7;
+            animation: rotateGlow 6s infinite reverse;
+            filter: drop-shadow(0 0 15px var(--accent-violet));
+        }
+
+        .section-subtitle {
+            text-align: center;
+            max-width: 800px;
+            margin: -30px auto 50px;
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            padding: 15px 30px;
+            background: var(--bg-card);
+            border-radius: 60px;
+            border: 1px solid var(--accent-violet);
+            box-shadow: var(--accent-glow);
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            animation: pulseGlow 5s infinite;
+        }
+
+        /* ===== ПРОДУКТЫ (БЕЗ ФОТОГРАФИЙ) ===== */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .product-card {
+            background: var(--gradient-card);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: var(--accent-glow);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+            animation: scaleIn 0.6s ease;
+            animation-fill-mode: both;
+            transform-style: preserve-3d;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.05s; }
+        .product-card:nth-child(2) { animation-delay: 0.1s; }
+        .product-card:nth-child(3) { animation-delay: 0.15s; }
+        .product-card:nth-child(4) { animation-delay: 0.2s; }
+        .product-card:nth-child(5) { animation-delay: 0.25s; }
+        .product-card:nth-child(6) { animation-delay: 0.3s; }
+        .product-card:nth-child(7) { animation-delay: 0.35s; }
+        .product-card:nth-child(8) { animation-delay: 0.4s; }
+        .product-card:nth-child(9) { animation-delay: 0.45s; }
+        .product-card:nth-child(10) { animation-delay: 0.5s; }
+        .product-card:nth-child(11) { animation-delay: 0.55s; }
+        .product-card:nth-child(12) { animation-delay: 0.6s; }
+
+        .product-card:hover {
+            transform: translateY(-18px) scale(1.03) rotateX(5deg);
+            box-shadow: var(--accent-glow-hover);
+            border-color: var(--accent-pink);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            z-index: 30;
+            box-shadow: var(--accent-glow);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            animation: pulseGlow 3s infinite;
+        }
+
+        /* ===== КОФЕЙНЫЕ КАРТИНКИ (ВМЕСТО ФОТО) ===== */
+        .coffee-art {
+            height: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid var(--accent-violet);
+        }
+
+        .coffee-art svg {
+            width: 150px;
+            height: 150px;
+            animation: float 5s infinite ease-in-out;
+            filter: drop-shadow(0 0 30px var(--accent-violet));
+        }
+
+        .coffee-art svg path,
+        .coffee-art svg circle {
+            stroke: var(--accent-pink);
+            fill: none;
+            stroke-width: 2;
+            animation: rotateGlow 10s infinite;
+        }
+
+        .coffee-art svg .fill {
+            fill: var(--accent-violet);
+            opacity: 0.3;
+            animation: pulseGlow 3s infinite;
+        }
+
+        .steam-effect {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .steam-effect div {
+            position: absolute;
+            width: 10px;
+            height: 50px;
+            background: linear-gradient(to top, transparent, var(--accent-pink));
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: steamFloat 3s infinite ease-in-out;
+        }
+
+        .steam-effect div:nth-child(1) { left: 30%; animation-delay: 0s; }
+        .steam-effect div:nth-child(2) { left: 50%; animation-delay: 0.5s; }
+        .steam-effect div:nth-child(3) { left: 70%; animation-delay: 1s; }
+
+        .product-info {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-card);
+            backdrop-filter: blur(5px);
+        }
+
+        .product-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+            font-family: 'Playfair Display', serif;
+            line-height: 1.3;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px var(--accent-violet);
+        }
+
+        .product-card:hover .product-title {
+            color: var(--accent-pink);
+            transform: translateX(5px);
+            text-shadow: 0 0 20px var(--accent-pink);
+        }
+
+        .product-description {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 12px 0;
+            border-top: 1px dashed var(--accent-violet);
+            border-bottom: 1px dashed var(--accent-pink);
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .product-price {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--accent-pink);
+            display: flex;
+            flex-direction: column;
+            text-shadow: 0 0 20px var(--accent-violet);
+        }
+
+        .product-price small {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .product-price span {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-decoration: line-through;
+            font-weight: 500;
+        }
+
+        .add-to-cart {
+            padding: 10px 20px;
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--accent-violet);
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            box-shadow: 0 0 20px var(--accent-violet);
+        }
+
+        .add-to-cart i {
+            color: var(--accent-pink);
+            transition: all 0.5s ease;
+        }
+
+        .add-to-cart:hover {
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            color: white;
+            border-color: white;
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: var(--accent-glow-hover);
+        }
+
+        .add-to-cart:hover i {
+            color: white;
+            transform: rotate(360deg) scale(1.2);
+        }
+
+        /* ===== ФИЛЬТРЫ ===== */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 60px;
+            border: 1px solid var(--accent-violet);
+            box-shadow: var(--accent-glow);
+        }
+
+        .filter-btn {
+            padding: 10px 24px;
+            border: 2px solid var(--accent-violet);
+            background: transparent;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px var(--accent-violet);
+        }
+
+        .filter-btn i {
+            color: var(--accent-pink);
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            color: white;
+            border-color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--accent-glow-hover);
+        }
+
+        .filter-btn:hover i,
+        .filter-btn.active i {
+            color: white;
+        }
+
+        .clear-filters {
+            background: transparent;
+            color: var(--text-primary);
+            border-color: var(--accent-pink);
+        }
+
+        .clear-filters:hover {
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-violet));
+            color: white;
+        }
+
+        /* ===== ПОДБОР ПО ВКУСУ ===== */
+        .flavor-match {
+            background: var(--bg-card);
+            border-radius: 50px;
+            padding: 50px 40px;
+            margin: 60px 0;
+            border: 1px solid var(--accent-violet);
+            box-shadow: var(--accent-glow);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            animation: pulseGlow 5s infinite;
+        }
+
+        .flavor-match h3 {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 0 0 20px var(--accent-violet);
+        }
+
+        .flavor-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .flavor-btn {
+            padding: 15px 35px;
+            background: transparent;
+            border: 2px solid var(--accent-violet);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            box-shadow: 0 0 20px var(--accent-violet);
+        }
+
+        .flavor-btn:hover {
+            transform: translateY(-5px) scale(1.05) rotate(2deg);
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            color: white;
+            border-color: white;
+            box-shadow: var(--accent-glow-hover);
+        }
+
+        /* ===== О НАС ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        .about-image {
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: var(--accent-glow);
+            border: 4px solid var(--accent-pink);
+            transform: rotate(-3deg);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: float 10s infinite;
+        }
+
+        .about-image svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .about-image:hover {
+            transform: rotate(0deg) scale(1.05);
+            border-color: var(--accent-violet);
+            box-shadow: var(--accent-glow-hover);
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: var(--bg-card);
+            padding: 30px 20px;
+            border-radius: 30px;
+            box-shadow: var(--accent-glow);
+            border: 1px solid var(--accent-violet);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: var(--accent-glow-hover);
+            border-color: var(--accent-pink);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent-pink);
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 5px;
+            text-shadow: 0 0 30px var(--accent-violet);
+            animation: bounceGlow 4s infinite;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            margin-top: 70px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 35px 25px;
+            background: var(--bg-card);
+            border-radius: 30px;
+            box-shadow: var(--accent-glow);
+            border: 1px solid var(--accent-violet);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .feature::before {
+            content: '☕';
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            font-size: 5rem;
+            opacity: 0.1;
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            filter: drop-shadow(0 0 20px var(--accent-pink));
+        }
+
+        .feature:hover::before {
+            transform: rotate(0deg) scale(1.3);
+            opacity: 0.2;
+        }
+
+        .feature:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: var(--accent-glow-hover);
+            border-color: var(--accent-pink);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--accent-pink);
+            margin-bottom: 20px;
+            animation: rotateGlow 8s infinite, float 6s infinite;
+            filter: drop-shadow(0 0 20px var(--accent-violet));
+        }
+
+        .feature h4 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            font-weight: 700;
+            text-shadow: 0 0 10px var(--accent-violet);
+        }
+
+        /* ===== ОТЗЫВЫ (ТОЛЬКО ЗДЕСЬ ФОТО) ===== */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+        }
+
+        .review-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: var(--accent-glow);
+            border: 1px solid var(--accent-violet);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .review-card::before {
+            content: '"';
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 5rem;
+            color: var(--accent-pink);
+            opacity: 0.1;
+            font-family: serif;
+            line-height: 1;
+            transition: all 0.6s ease;
+        }
+
+        .review-card:hover::before {
+            opacity: 0.3;
+            transform: rotate(15deg) scale(1.2);
+        }
+
+        .review-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: var(--accent-glow-hover);
+            border-color: var(--accent-pink);
+        }
+
+        .reviewer {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .reviewer img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-pink);
+            padding: 2px;
+            background: var(--bg-primary);
+            box-shadow: 0 0 30px var(--accent-violet);
+            animation: pulseGlow 3s infinite;
+        }
+
+        .stars {
+            color: var(--accent-pink);
+            display: flex;
+            gap: 3px;
+            margin-top: 5px;
+        }
+
+        .stars i {
+            animation: twinkle 2s infinite;
+            filter: drop-shadow(0 0 5px var(--accent-violet));
+        }
+
+        /* ===== КОНТАКТЫ ===== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-info {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: var(--accent-glow);
+            border: 1px solid var(--accent-violet);
+            backdrop-filter: blur(5px);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: var(--bg-primary);
+            border-radius: 20px;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid transparent;
+        }
+
+        .contact-item:hover {
+            transform: translateX(10px) scale(1.02);
+            border-color: var(--accent-pink);
+            box-shadow: var(--accent-glow);
+            background: var(--bg-card);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            box-shadow: var(--accent-glow);
+            animation: rotateGlow 7s infinite;
+        }
+
+        .contact-form {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: var(--accent-glow);
+            border: 1px solid var(--accent-violet);
+            backdrop-filter: blur(5px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-shadow: 0 0 5px var(--accent-violet);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid var(--accent-violet);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.5s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            box-shadow: 0 0 20px rgba(125, 60, 255, 0.2);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-pink);
+            box-shadow: var(--accent-glow);
+            transform: scale(1.02);
+        }
+
+        textarea.form-control {
+            border-radius: 20px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* ===== ФУТЕР ===== */
+        footer {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 70px 0 30px;
+            margin-top: 80px;
+            position: relative;
+            border-top: 5px solid var(--accent-violet);
+            box-shadow: 0 -20px 60px var(--accent-violet);
+        }
+
+        footer::before {
+            content: '☕☕☕☕☕☕';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            font-size: 3rem;
+            opacity: 0.1;
+            white-space: nowrap;
+            animation: slideInLeft 20s linear infinite;
+            color: var(--accent-pink);
+            text-shadow: 0 0 30px var(--accent-violet);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .footer-column h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            border-bottom: 2px solid var(--accent-pink);
+            display: inline-block;
+            padding-bottom: 8px;
+            text-shadow: 0 0 20px var(--accent-violet);
+        }
+
+        .footer-column p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-column ul li i {
+            color: var(--accent-pink);
+            width: 20px;
+            text-shadow: 0 0 20px var(--accent-violet);
+            animation: twinkle 3s infinite;
+        }
+
+        .footer-column a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .footer-column a:hover {
+            color: var(--accent-pink);
+            transform: translateX(10px) scale(1.1);
+            text-shadow: 0 0 20px var(--accent-pink);
+            display: inline-block;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: var(--bg-primary);
+            border-radius: 50%;
+            color: var(--text-primary);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 1.3rem;
+            border: 2px solid var(--accent-violet);
+            box-shadow: var(--accent-glow);
+            animation: float 5s infinite;
+        }
+
+        .social-icons a:nth-child(2) { animation-delay: 0.5s; }
+        .social-icons a:nth-child(3) { animation-delay: 1s; }
+
+        .social-icons a:hover {
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            color: white;
+            transform: translateY(-10px) scale(1.2) rotate(360deg);
+            border-color: white;
+            box-shadow: var(--accent-glow-hover);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 2px solid var(--accent-violet);
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 20;
+        }
+
+        .copyright strong {
+            color: var(--accent-pink);
+            text-shadow: 0 0 20px var(--accent-violet);
+        }
+
+        /* ===== МОДАЛКА КОРЗИНЫ ===== */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: scaleIn 0.4s ease;
+        }
+
+        .cart-content {
+            background: var(--gradient-card);
+            width: 90%;
+            max-width: 900px;
+            border-radius: 50px;
+            padding: 40px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--accent-glow-hover);
+            border: 2px solid var(--accent-pink);
+            backdrop-filter: blur(10px);
+        }
+
+        .close-cart {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: 2px solid var(--accent-violet);
+            box-shadow: var(--accent-glow);
+        }
+
+        .close-cart:hover {
+            transform: rotate(180deg) scale(1.2);
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            color: white;
+            border-color: white;
+            box-shadow: var(--accent-glow-hover);
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-violet);
+        }
+
+        .cart-header h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+            text-shadow: 0 0 20px var(--accent-violet);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        .empty-cart-icon {
+            font-size: 4rem;
+            color: var(--accent-pink);
+            margin-bottom: 20px;
+            animation: rotateGlow 6s infinite, float 4s infinite;
+        }
+
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: var(--accent-glow-hover);
+            z-index: 3000;
+            transform: translateX(120%);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            border: 2px solid var(--accent-pink);
+            backdrop-filter: blur(10px);
+            animation: pulseGlow 3s infinite;
+        }
+
+        .notification i {
+            color: var(--accent-pink);
+            animation: rotateGlow 4s infinite;
+        }
+
+        .floating-cart {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink));
+            color: white;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: var(--accent-glow-hover);
+            z-index: 99;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 4px solid white;
+            animation: rippleEffect 2s infinite, float 6s infinite;
+        }
+
+        .floating-cart:hover {
+            transform: scale(1.2) rotate(360deg);
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-violet));
+            box-shadow: var(--accent-glow-hover);
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 1100px) {
+            .container { padding: 0 20px; }
+            .hero h1 { font-size: 3.2rem; }
+            .section-title { font-size: 2.5rem; }
+            .about-grid, .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+            .theme-switcher {
+                top: 120px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            .section-title::before,
+            .section-title::after { display: none; }
+            .products-grid { grid-template-columns: 1fr; }
+            .about-stats { grid-template-columns: 1fr; }
+            .reviews-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; }
+            nav ul { gap: 15px; flex-wrap: wrap; justify-content: center; }
+            nav a { font-size: 0.85rem; }
+            .filters { border-radius: 30px; padding: 15px; }
+            .theme-switcher {
+                top: 140px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <!-- Переключатель темы -->
+    <div class="theme-switcher">
+        <div class="theme-btn" id="themeToggle">
+            <i class="fas fa-sun"></i>
+        </div>
+    </div>
+
+    <!-- Звездный фон -->
+    <div class="stars-container" id="stars"></div>
+
+    <!-- Кофейные декорации -->
+    <div class="floating-coffee" style="top: 15%; left: 5%;">☕</div>
+    <div class="floating-coffee" style="bottom: 20%; right: 8%; animation-delay: 2s;">☕</div>
+    <div class="floating-coffee" style="top: 60%; left: 10%; animation-delay: 4s;">☕</div>
+    
+    <div class="coffee-steam" style="left: 20%; top: 30%;"></div>
+    <div class="coffee-steam" style="right: 25%; top: 70%; animation-delay: 3s;"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-mug-hot logo-icon"></i>
+                <span>Stellar Coffee</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="active">Главная</a></li>
+                    <li><a href="#catalog">Меню</a></li>
+                    <li><a href="#about">О нас</a></li>
+                    <li><a href="#contact">Контакты</a></li>
+                    <li><a href="#reviews">Отзывы</a></li>
+                </ul>
+            </nav>
+            <div class="cart-icon" id="cartIcon">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <h1>Кофейня под звездами<br>Stellar Coffee</h1>
+            <p>✨ Погрузись в магию ночи с нашим кофе. Эфиопия, Колумбия, Кения — каждое зерно проходит через звездный свет. Обжарка под луной, доставка с мерцанием.</p>
+            <a href="#catalog" class="btn">
+                <i class="fas fa-mug-hot"></i>
+                Выбрать кофе
+                <i class="fas fa-star"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Catalog Section -->
+    <section id="catalog">
+        <div class="container">
+            <h2 class="section-title">Звездное меню</h2>
+            <p class="section-subtitle">✨ 25+ сортов спешелти кофе. Свежая обжарка. Доставка по всей России. Каждый сорт — уникальный вкус под звездами.</p>
+            
+            <!-- Фильтры по странам -->
+            <div class="filters" id="filters">
+                <button class="filter-btn active" data-filter="all"><i class="fas fa-mug-hot"></i> Все</button>
+                <button class="filter-btn" data-filter="Эфиопия"><i class="fas fa-leaf"></i> Эфиопия</button>
+                <button class="filter-btn" data-filter="Колумбия"><i class="fas fa-mountain"></i> Колумбия</button>
+                <button class="filter-btn" data-filter="Бразилия"><i class="fas fa-tree"></i> Бразилия</button>
+                <button class="filter-btn" data-filter="Кения"><i class="fas fa-sun"></i> Кения</button>
+                <button class="filter-btn clear-filters" id="clearFilters"><i class="fas fa-undo"></i> Сброс</button>
+            </div>
+            
+            <div class="products-grid" id="productsGrid"></div>
+            
+            <!-- Подбор по вкусу -->
+            <div class="flavor-match">
+                <h3>✨ Не знаешь, что выбрать? Подбери по настроению! ✨</h3>
+                <div class="flavor-buttons">
+                    <button class="flavor-btn" data-flavor="цветочный">🌸 Цветочный</button>
+                    <button class="flavor-btn" data-flavor="шоколадный">🍫 Шоколадный</button>
+                    <button class="flavor-btn" data-flavor="фруктовый">🍊 Фруктовый</button>
+                    <button class="flavor-btn" data-flavor="ореховый">🌰 Ореховый</button>
+                </div>
+                <div id="flavorResult" style="margin-top: 25px; font-size: 1rem; color: var(--text-secondary);"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">О нашей кофейне</h2>
+            
+            <div class="about-grid">
+                <div class="about-image">
+                    <svg viewBox="0 0 200 200" width="100%" height="100%">
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="var(--accent-pink)" stroke-width="3" stroke-dasharray="10 5"/>
+                        <path d="M60,100 Q100,60 140,100 Q100,140 60,100" fill="none" stroke="var(--accent-violet)" stroke-width="4"/>
+                        <circle cx="100" cy="100" r="30" fill="none" stroke="var(--accent-pink)" stroke-width="2"/>
+                        <path d="M80,80 L120,120 M120,80 L80,120" stroke="var(--accent-violet)" stroke-width="2"/>
+                        <circle cx="100" cy="100" r="5" fill="var(--accent-pink)">
+                            <animate attributeName="r" values="5;8;5" dur="3s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+                <div>
+                    <h3 style="font-size: 2rem; margin-bottom: 25px; color: var(--text-primary); font-family: 'Playfair Display', serif; text-shadow: 0 0 15px var(--accent-violet);">
+                        Больше, чем просто кофе ✨
+                    </h3>
+                    <p style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">Мы начали свой путь в 2015 году с небольшой обжарочной, работающей по ночам. Сегодня Stellar Coffee — это команда магов кофе, которые обжаривают зерна для лучших кофеен и ценителей по всей России.</p>
+                    <p style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">Мы работаем напрямую с фермерами под покровом ночи, исключая посредников. Это позволяет нам гарантировать качество каждого зерна и предлагать честные цены.</p>
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">Каждая партия проходит строгий контроль при звездном свете: зеленое зерно тестируется на влажность и дефекты, после обжарки мы проводим каппинг и только после этого отправляем кофе вам.</p>
+                </div>
+            </div>
+            
+            <div class="about-stats">
+                <div class="stat-item">
+                    <div class="stat-number">8+</div>
+                    <div style="color: var(--text-secondary); font-weight: 600;">лет работы</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">25+</div>
+                    <div style="color: var(--text-secondary); font-weight: 600;">сортов кофе</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5000+</div>
+                    <div style="color: var(--text-secondary); font-weight: 600;">довольных клиентов</div>
+                </div>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h4>Звездные поставки</h4>
+                    <p>Работаем с фермерами из 12 стран мира под луной</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <h4>Ночная обжарка</h4>
+                    <p>Обжариваем под заказ в полночь</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h4>Магическое качество</h4>
+                    <p>Только Specialty кофе с оценкой SCA выше 84 баллов</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h4>Быстрая доставка</h4>
+                    <p>Бесплатная доставка от 3000₽</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section (ТОЛЬКО ЗДЕСЬ ФОТО) -->
+    <section id="reviews">
+        <div class="container">
+            <h2 class="section-title">Звездные отзывы</h2>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="reviewer">
+                        <img src="https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&fit=crop" alt="Анна">
+                        <div class="reviewer-info">
+                            <h4 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 5px;">Анна Смирнова</h4>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">"Заказываю кофе в Stellar Coffee уже больше года. Всегда свежий, ароматный, будто пропитанный звездным светом. Особенно нравится Эфиопия Иргачеффе — очень нежный вкус с цветочными нотками."</p>
+                </div>
+                <div class="review-card">
+                    <div class="reviewer">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Дмитрий">
+                        <div class="reviewer-info">
+                            <h4 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 5px;">Дмитрий Волков</h4>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">"Отличный магазин для настоящих кофеманов! Пробовал уже 8 разных сортов, все очень достойные. Особо хочу отметить Колумбию Супремо — идеальный баланс, шоколадные ноты."</p>
+                </div>
+                <div class="review-card">
+                    <div class="reviewer">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Екатерина">
+                        <div class="reviewer-info">
+                            <h4 style="color: var(--text-primary); font-size: 1.2rem; margin-bottom: 5px;">Екатерина Лебедева</h4>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">"Stellar Coffee открыл для меня мир магического кофе! Очень нравится, что можно заказать пробники по 100г и попробовать разные сорта. А дизайн упаковки — просто космос!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Свяжитесь с нами</h2>
+            
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 35px; color: var(--text-primary); font-family: 'Playfair Display', serif;">
+                        Звездная почта
+                    </h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4 style="color: var(--text-primary); margin-bottom: 5px;">Адрес</h4>
+                            <p style="color: var(--text-secondary);">г. Москва, ул. Звездная, 15</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4 style="color: var(--text-primary); margin-bottom: 5px;">Телефон</h4>
+                            <p style="color: var(--text-secondary);">+7 (495) 123-45-67</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h4 style="color: var(--text-primary); margin-bottom: 5px;">Email</h4>
+                            <p style="color: var(--text-secondary);">hello@stellarcoffee.ru</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3 style="font-size: 1.8rem; margin-bottom: 35px; color: var(--text-primary); font-family: 'Playfair Display', serif;">
+                        Напишите нам
+                    </h3>
+                    <form id="feedbackForm">
+                        <div class="form-group">
+                            <label for="name">Ваше имя *</label>
+                            <input type="text" id="name" class="form-control" placeholder="Иван Иванов" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" class="form-control" placeholder="example@mail.ru" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Сообщение *</label>
+                            <textarea id="message" class="form-control" placeholder="Напишите нам..." required rows="4"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i>
+                            Отправить
+                        </button>
+                        
+                        <div class="form-message" id="formMessage" style="margin-top: 20px; display: none;"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <span class="close-cart" id="closeCart">&times;</span>
+            <div class="cart-header">
+                <h2><i class="fas fa-shopping-bag"></i> Звездная корзина</h2>
+                <div style="background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink)); padding: 8px 20px; border-radius: 30px; color: white; font-weight: 600; box-shadow: var(--accent-glow);">
+                    Товаров: <span id="cartItemsCount">0</span>
+                </div>
+            </div>
+            
+            <div class="cart-items" id="cartItems"></div>
+            
+            <div style="background: var(--bg-card); padding: 25px; border-radius: 20px; margin-bottom: 25px; border: 1px solid var(--accent-violet);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="color: var(--text-secondary);">Сумма заказа:</span>
+                    <span id="cartSubtotal" style="font-weight: 800; color: var(--text-primary);">0 ₽</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: 900; margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--accent-pink);">
+                    <span style="color: var(--text-primary);">Итого:</span>
+                    <span id="cartTotal" style="color: var(--accent-pink);">0 ₽</span>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 15px;">
+                <button class="btn btn-outline" id="continueShopping" style="flex: 1;">
+                    Продолжить
+                </button>
+                <button class="btn" id="checkout" style="flex: 2;">
+                    Оформить заказ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Cart -->
+    <div class="floating-cart" id="floatingCart">
+        <i class="fas fa-shopping-bag"></i>
+        <span style="position: absolute; top: -5px; right: -5px; background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink)); color: white; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 900; border: 2px solid white; box-shadow: var(--accent-glow);" id="floatingCartCount">0</span>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Stellar Coffee</h3>
+                    <p>✨ Свежеобжаренный спешелти кофе с доставкой по всей России. Работаем с 2015 года. Магическое настроение в каждой чашке.</p>
+                    <div class="social-icons">
+                        <a href="https://vk.com/likallk" target="_blank" rel="noopener noreferrer"><i class="fab fa-vk"></i></a>
+                        <a href="https://t.me/likallk" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram"></i></a>
+                        <a href="https://instagram.com/likallk" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:likaorenburg@gmail.com">likaorenburg@gmail.com</a>
+                        </li>
+                        <li>
+                            <i class="fab fa-vk"></i>
+                            <a href="https://vk.com/likallk" target="_blank" rel="noopener noreferrer">vk.com/likallk</a>
+                        </li>
+                        <li>
+                            <i class="fab fa-telegram"></i>
+                            <a href="https://t.me/likallk" target="_blank" rel="noopener noreferrer">t.me/likallk</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Новости</h3>
+                    <p>Подпишитесь на звездные новости</p>
+                    <div style="margin-top: 20px;">
+                        <input type="email" id="newsletterEmail" class="form-control" placeholder="Ваш email" style="background: var(--bg-primary); color: var(--text-primary); border-color: var(--accent-violet); margin-bottom: 10px;">
+                        <button id="subscribeBtn" class="btn" style="width: 100%;">Подписаться</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2015-2024 Stellar Coffee. Все права защищены.</p>
+                <p style="margin-top: 10px;">Контакты: <strong>likaorenburg@gmail.com</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Генерация звездного фона
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+            
+            for (let i = 0; i < 5; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.className = 'shooting-star';
+                shootingStar.style.left = Math.random() * 100 + '%';
+                shootingStar.style.top = Math.random() * 100 + '%';
+                shootingStar.style.animationDelay = Math.random() * 5 + 's';
+                starsContainer.appendChild(shootingStar);
+            }
+        }
+
+        // Переключение темы
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.querySelector('.theme-btn i');
+            
+            if (body.classList.contains('dark-theme')) {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+                themeIcon.className = 'fas fa-moon';
+            } else {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+                themeIcon.className = 'fas fa-sun';
+            }
+        }
+
+        // ПОЛНЫЙ СПИСОК ТОВАРОВ (12 ПОЗИЦИЙ) С КОФЕЙНЫМИ КАРТИНКАМИ
+        const products = [
+            {
+                id: 1,
+                name: "Эфиопия Иргачеффе",
+                description: "Цветочный аромат с нотами жасмина, бергамота и лимона. Легкая кислинка, чайная текстура.",
+                price: 1250,
+                icon: "☕",
+                badge: "✨ Хит продаж",
+                weight: "250г",
+                roast: "Светлая",
+                country: "Эфиопия",
+                flavor: "цветочный",
+                discount: 0
+            },
+            {
+                id: 2,
+                name: "Колумбия Супремо",
+                description: "Сбалансированный кофе с нотами карамели, шоколада и орехов. Плотное тело, умеренная кислотность.",
+                price: 1150,
+                icon: "☕",
+                badge: "⭐ Популярный",
+                weight: "250г",
+                roast: "Средняя",
+                country: "Колумбия",
+                flavor: "шоколадный",
+                discount: 100
+            },
+            {
+                id: 3,
+                name: "Бразилия Сантос",
+                description: "Мягкий, сладкий кофе с нотами шоколада и карамели. Низкая кислотность, отличный выбор для эспрессо.",
+                price: 950,
+                icon: "☕",
+                badge: "🔥 Для эспрессо",
+                weight: "250г",
+                roast: "Темная",
+                country: "Бразилия",
+                flavor: "шоколадный",
+                discount: 0
+            },
+            {
+                id: 4,
+                name: "Гватемала Антигуа",
+                description: "Насыщенный вкус с нотами темного шоколада, какао и специй. Дымный оттенок, долгое послевкусие.",
+                price: 1350,
+                icon: "☕",
+                badge: "💫 Премиум",
+                weight: "250г",
+                roast: "Темная",
+                country: "Гватемала",
+                flavor: "шоколадный",
+                discount: 0
+            },
+            {
+                id: 5,
+                name: "Кения АА",
+                description: "Яркий, насыщенный кофе с нотами черной смородины и грейпфрута. Высокая кислотность.",
+                price: 1450,
+                icon: "☕",
+                badge: "✨ Спешелти",
+                weight: "250г",
+                roast: "Светлая",
+                country: "Кения",
+                flavor: "фруктовый",
+                discount: 150
+            },
+            {
+                id: 6,
+                name: "Коста-Рика Тарразу",
+                description: "Чистый, сладкий вкус с нотами карамели, яблока и меда. Сбалансированная кислотность.",
+                price: 1300,
+                icon: "☕",
+                badge: "🆕 Новинка",
+                weight: "250г",
+                roast: "Средняя",
+                country: "Коста-Рика",
+                flavor: "фруктовый",
+                discount: 0
+            },
+            {
+                id: 7,
+                name: "Индонезия Суматра",
+                description: "Землистый вкус с нотами специй, кедра и темного шоколада. Вязкое тело, низкая кислотность.",
+                price: 1250,
+                icon: "☕",
+                badge: "🌙 Для турки",
+                weight: "250г",
+                roast: "Темная",
+                country: "Индонезия",
+                flavor: "ореховый",
+                discount: 0
+            },
+            {
+                id: 8,
+                name: "Перу Чанчамайо",
+                description: "Мягкий, сладкий кофе с нотами миндаля, молочного шоколада и цитрусов. Органический сертификат.",
+                price: 1100,
+                icon: "☕",
+                badge: "🌱 Органик",
+                weight: "250г",
+                roast: "Средняя",
+                country: "Перу",
+                flavor: "ореховый",
+                discount: 0
+            },
+            {
+                id: 9,
+                name: "Йемен Матари",
+                description: "Редкий кофе с нотами темного шоколада, красного вина и специй. Комплексный вкус.",
+                price: 1900,
+                icon: "☕",
+                badge: "💎 Лимитированный",
+                weight: "250г",
+                roast: "Средняя",
+                country: "Йемен",
+                flavor: "шоколадный",
+                discount: 200
+            },
+            {
+                id: 10,
+                name: "Никарагуа Хинотега",
+                description: "Сбалансированный кофе с нотами красного яблока, карамели и орехов. Чистый вкус.",
+                price: 1050,
+                icon: "☕",
+                badge: "✨ Новинка",
+                weight: "250г",
+                roast: "Средняя",
+                country: "Никарагуа",
+                flavor: "фруктовый",
+                discount: 100
+            },
+            {
+                id: 11,
+                name: "Гондурас Маркала",
+                description: "Сладкий кофе с нотами тропических фруктов, карамели и шоколада. Умеренная кислотность.",
+                price: 1000,
+                icon: "☕",
+                badge: "⭐ Доступный",
+                weight: "250г",
+                roast: "Светлая",
+                country: "Гондурас",
+                flavor: "фруктовый",
+                discount: 150
+            },
+            {
+                id: 12,
+                name: "Подарочный набор",
+                description: "4 сорта кофе по 100г: Эфиопия, Колумбия, Бразилия, Гватемала. В комплекте звездная кружка.",
+                price: 3500,
+                icon: "🎁",
+                badge: "🎁 Лучший подарок",
+                weight: "4х100г + кружка",
+                roast: "Разная",
+                country: "Разные страны",
+                flavor: "смешанный",
+                discount: 500
+            }
+        ];
+
+        // Корзина
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // DOM элементы
+        const productsGrid = document.getElementById('productsGrid');
+        const cartIcon = document.getElementById('cartIcon');
+        const floatingCart = document.getElementById('floatingCart');
+        const cartModal = document.getElementById('cartModal');
+        const closeCart = document.getElementById('closeCart');
+        const continueShopping = document.getElementById('continueShopping');
+        const cartItems = document.getElementById('cartItems');
+        const cartSubtotal = document.getElementById('cartSubtotal');
+        const cartTotal = document.getElementById('cartTotal');
+        const cartItemsCount = document.getElementById('cartItemsCount');
+        const checkoutBtn = document.getElementById('checkout');
+        const cartCount = document.querySelector('.cart-count');
+        const floatingCartCount = document.getElementById('floatingCartCount');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const formMessage = document.getElementById('formMessage');
+        const subscribeBtn = document.getElementById('subscribeBtn');
+        const newsletterEmail = document.getElementById('newsletterEmail');
+
+        // Функция для создания SVG кофейной чашки
+        function createCoffeeSVG(icon) {
+            return `
+                <div class="coffee-art">
+                    <svg viewBox="0 0 100 100" width="120" height="120">
+                        <circle cx="50" cy="50" r="30" fill="none" stroke="var(--accent-pink)" stroke-width="3" stroke-dasharray="5 3"/>
+                        <path d="M30,40 L70,40 L65,70 L35,70 Z" fill="none" stroke="var(--accent-violet)" stroke-width="3"/>
+                        <path d="M70,45 L80,45 Q85,50 80,55 L70,55" fill="none" stroke="var(--accent-pink)" stroke-width="3"/>
+                        <circle cx="50" cy="45" r="5" fill="var(--accent-violet)" opacity="0.3">
+                            <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <text x="45" y="60" font-size="30" fill="var(--accent-pink)" text-anchor="middle" dy=".3em">${icon}</text>
+                        <path d="M35,30 Q50,20 65,30" stroke="white" stroke-width="2" fill="none" opacity="0.3">
+                            <animate attributeName="d" values="M35,30 Q50,20 65,30; M35,30 Q50,10 65,30; M35,30 Q50,20 65,30" dur="3s" repeatCount="indefinite"/>
+                        </path>
+                    </svg>
+                    <div class="steam-effect">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Инициализация товаров с фильтрацией
+        function initProducts(filter = 'all') {
+            productsGrid.innerHTML = '';
+            
+            let filteredProducts = products;
+            if (filter !== 'all') {
+                filteredProducts = products.filter(p => p.country === filter);
+            }
+            
+            filteredProducts.forEach((product) => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                const displayPrice = product.discount > 0 ? product.price - product.discount : product.price;
+                
+                productCard.innerHTML = `
+                    ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                    ${createCoffeeSVG(product.icon)}
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-meta">
+                            <span><i class="fas fa-weight-hanging"></i> ${product.weight}</span>
+                            <span><i class="fas fa-fire"></i> ${product.roast}</span>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price">
+                                ${displayPrice} ₽
+                                ${product.discount > 0 ? `<span>${product.price} ₽</span>` : ''}
+                            </div>
+                            <button class="add-to-cart" data-id="${product.id}">
+                                <i class="fas fa-shopping-bag"></i> В корзину
+                            </button>
+                        </div>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+
+            // Обработчики для кнопок добавления в корзину
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    addToCart(productId);
+                    
+                    this.innerHTML = '<i class="fas fa-check"></i> Добавлено ✨';
+                    this.style.background = 'linear-gradient(135deg, var(--accent-violet), var(--accent-pink))';
+                    this.style.color = 'white';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-shopping-bag"></i> В корзину';
+                        this.style.background = '';
+                        this.style.color = '';
+                    }, 1500);
+                });
+            });
+        }
+
+        // Добавление в корзину
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                const price = product.discount > 0 ? product.price - product.discount : product.price;
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: price,
+                    originalPrice: product.price,
+                    icon: product.icon,
+                    weight: product.weight,
+                    quantity: 1
+                });
+            }
+
+            updateCart();
+            showNotification(`${product.name} добавлен в корзину ✨`);
+        }
+
+        // Обновление корзины
+        function updateCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            if (floatingCartCount) {
+                floatingCartCount.textContent = totalItems;
+            }
+            
+            if (cartItemsCount) {
+                cartItemsCount.textContent = totalItems;
+            }
+
+            renderCartItems();
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            if (cartSubtotal) cartSubtotal.textContent = `${subtotal} ₽`;
+            if (cartTotal) cartTotal.textContent = `${subtotal} ₽`;
+        }
+
+        // Отображение корзины
+        function renderCartItems() {
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">
+                            <i class="fas fa-mug-hot"></i>
+                        </div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 15px; color: var(--text-primary);">Корзина пуста</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 30px;">Добавьте звездный кофе в корзину</p>
+                        <button class="btn" id="browseCatalogBtn" style="margin: 0 auto;">
+                            <i class="fas fa-mug-hot"></i> В каталог
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('browseCatalogBtn')?.addEventListener('click', () => {
+                    cartModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    document.querySelector('#catalog').scrollIntoView({ behavior: 'smooth' });
+                });
+                
+                return;
+            }
+
+            cartItems.innerHTML = '';
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.style.cssText = `
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 15px;
+                    background: var(--bg-card);
+                    border-radius: 20px;
+                    margin-bottom: 15px;
+                    border: 1px solid var(--accent-violet);
+                    transition: all 0.3s ease;
+                `;
+                
+                cartItem.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <div style="font-size: 2.5rem; filter: drop-shadow(0 0 20px var(--accent-violet));">
+                            ${item.icon}
+                        </div>
+                        <div>
+                            <h4 style="font-size: 1rem; margin-bottom: 3px; color: var(--text-primary);">${item.name}</h4>
+                            <div style="font-weight: 700; color: var(--accent-pink);">${item.price} ₽</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="quantity-btn decrease" data-id="${item.id}" style="width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--accent-violet); background: transparent; color: var(--text-primary); cursor: pointer; transition: all 0.3s ease;">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span style="font-size: 1rem; font-weight: 700; min-width: 25px; text-align: center; color: var(--text-primary);">${item.quantity}</span>
+                            <button class="quantity-btn increase" data-id="${item.id}" style="width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--accent-pink); background: linear-gradient(135deg, var(--accent-violet), var(--accent-pink)); color: white; cursor: pointer; transition: all 0.3s ease;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <button class="remove-item" data-id="${item.id}" style="padding: 8px 12px; background: transparent; border: 2px solid var(--accent-pink); border-radius: 20px; color: var(--text-primary); cursor: pointer; transition: all 0.3s ease;">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+
+            document.querySelectorAll('.decrease').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    updateQuantity(productId, -1);
+                });
+            });
+
+            document.querySelectorAll('.increase').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    updateQuantity(productId, 1);
+                });
+            });
+
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    removeFromCart(productId);
+                });
+            });
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(item => item.id !== productId);
+                }
+                updateCart();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+            showNotification('Товар удален из корзины ✨');
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `<i class="fas fa-star"></i> ${message}`;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+
+            setTimeout(() => {
+                notification.style.transform = 'translateX(120%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 600);
+            }, 3000);
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function handleFeedbackForm(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            if (!name || !email || !message) {
+                formMessage.style.display = 'block';
+                formMessage.textContent = 'Пожалуйста, заполните все поля';
+                formMessage.style.background = '#f8d7da';
+                formMessage.style.color = '#721c24';
+                formMessage.style.padding = '12px';
+                formMessage.style.borderRadius = '10px';
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                formMessage.style.display = 'block';
+                formMessage.textContent = 'Введите корректный email адрес';
+                formMessage.style.background = '#f8d7da';
+                formMessage.style.color = '#721c24';
+                return;
+            }
+            
+            formMessage.style.display = 'block';
+            formMessage.textContent = 'Спасибо! Ваше сообщение отправлено ✨';
+            formMessage.style.background = '#d4edda';
+            formMessage.style.color = '#155724';
+            formMessage.style.padding = '12px';
+            formMessage.style.borderRadius = '10px';
+            
+            feedbackForm.reset();
+            
+            setTimeout(() => {
+                formMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function handleSubscribe() {
+            const email = newsletterEmail.value;
+            
+            if (!email) {
+                showNotification('Введите email для подписки');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showNotification('Введите корректный email');
+                return;
+            }
+            
+            showNotification(`Спасибо! Вы подписались на звездные новости ✨`);
+            newsletterEmail.value = '';
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Добавьте звездный кофе в корзину ✨');
+                return;
+            }
+
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            showNotification(`Заказ оформлен! ${totalItems} товаров на сумму ${totalPrice} ₽. Спасибо! ✨`);
+            
+            cart = [];
+            updateCart();
+            
+            cartModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Инициализация приложения
+        function initApp() {
+            createStars();
+            initProducts();
+            updateCart();
+
+            // Переключатель темы
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            // Фильтры
+            document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const filter = this.dataset.filter;
+                    initProducts(filter);
+                });
+            });
+
+            document.getElementById('clearFilters').addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('[data-filter="all"]').classList.add('active');
+                initProducts('all');
+            });
+
+            // Подбор по вкусу
+            document.querySelectorAll('.flavor-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const flavor = this.dataset.flavor;
+                    const recommended = products.filter(p => p.flavor === flavor);
+                    const resultDiv = document.getElementById('flavorResult');
+                    
+                    if (recommended.length > 0) {
+                        const names = recommended.map(p => p.name).join(', ');
+                        resultDiv.innerHTML = `✨ Тебе подойдут: ${names} ✨`;
+                    } else {
+                        resultDiv.innerHTML = '✨ Попробуй наш подарочный набор! ✨';
+                    }
+                });
+            });
+
+            // Корзина
+            cartIcon.addEventListener('click', () => {
+                cartModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+            
+            if (floatingCart) {
+                floatingCart.addEventListener('click', () => {
+                    cartModal.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            closeCart.addEventListener('click', () => {
+                cartModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            continueShopping.addEventListener('click', () => {
+                cartModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+
+            cartModal.addEventListener('click', (e) => {
+                if (e.target === cartModal) {
+                    cartModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && cartModal.style.display === 'flex') {
+                    cartModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            checkoutBtn.addEventListener('click', checkout);
+            feedbackForm.addEventListener('submit', handleFeedbackForm);
+            subscribeBtn.addEventListener('click', handleSubscribe);
+
+            // Навигация
+            document.querySelectorAll('nav a, .btn[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href && href.startsWith('#')) {
+                        e.preventDefault();
+                        const targetElement = document.querySelector(href);
+                        if (targetElement) {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 100,
+                                behavior: 'smooth'
+                            });
+                            
+                            document.querySelectorAll('nav a').forEach(link => {
+                                link.classList.remove('active');
+                            });
+                            this.classList.add('active');
+                        }
+                    }
+                });
+            });
+
+            // Скролл
+            window.addEventListener('scroll', function() {
+                const sections = document.querySelectorAll('section');
+                const navLinks = document.querySelectorAll('nav a');
+                
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.pageYOffset >= sectionTop - 150) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                if (window.scrollY > 500) {
+                    floatingCart.style.display = 'flex';
+                } else {
+                    floatingCart.style.display = 'none';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
